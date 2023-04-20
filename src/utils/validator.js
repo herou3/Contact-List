@@ -26,7 +26,6 @@ export function validator(data, config) {
       userDateArray = data.split(".")
       const currentDate = new Date()
       inputDate = new Date(`${userDateArray[1] +  "/" + userDateArray[0] + "/" + userDateArray[2]}`)
-      console.log();
       if (currentDate.getTime() < inputDate.getTime() ||
         (inputDate.getFullYear === currentDate.getFullYear) && inputDate.getMonth() === currentDate.getMonth() && inputDate.getDay() === currentDate.getDay()) {
         statusValidate = true

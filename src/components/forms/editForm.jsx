@@ -25,7 +25,6 @@ const EditForm = ({ data, validatorConfig, onChange, isHaveDate, onCompleteChang
   const validate = () => {
     const errors = validator(data, validatorConfig)
     setErrors(errors)
-    console.log(errors)
     return Object.keys(errors).length === 0
   }
 
