@@ -19,8 +19,11 @@ export function validator(data, config) {
       statusValidate = !nameRexExp.test(data)
       break
     case "isFormat":
+      const dateText = data.split("-")
+      const neededDate = dateText[2] + "." +  dateText[1] + "." + dateText[0] 
       const birthdayRexExp = /^(([123]{1}[0-9]){1}|[0]{1}[1-9]{1})\.([0]{1}[1-9]{1}|[1]{1}[012])\.[0-9]{4}$/g
-      statusValidate = !birthdayRexExp.test(data)
+      statusValidate = !birthdayRexExp.test(neededDate.trim())
+      console.log(neededDate);
       break
     case "isLessCurrentDate":
       userDateArray = data.split(".")

@@ -19,18 +19,17 @@ const ContactCard = () => {
   const handleCompleteEdit = () => {
     setData(currentData)
     setIsHaveData(true)
-    toggleChangeEditMpde()
   }
 
-  const toggleChangeEditMpde = () => {
+  const toggleChangeEditMode = () => {
     setIsEditMode((prevState) => !prevState)
   }
 
   return (
     <>
     {!isEditMode
-      ? <ContactInfo firstName={data.firstName} lastName={data.lastName} birthday={data.birthday} url={data.url} onChangeMode={toggleChangeEditMpde} />
-      : <EditForm data={currentData} validatorConfig={validatorConfig} isHaveDate={isHaveData} onChange={handleChange} onCompleteChange={handleCompleteEdit} />
+      ? <ContactInfo firstName={data.firstName} lastName={data.lastName} birthday={data.birthday} url={data.url} onChangeMode={toggleChangeEditMode} />
+      : <EditForm data={currentData} validatorConfig={validatorConfig} isHaveDate={isHaveData} onChange={handleChange} onCompleteChange={handleCompleteEdit} onChangeMode={toggleChangeEditMode}/>
     }
     </>
   )

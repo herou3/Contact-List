@@ -1,3 +1,5 @@
+import React from "react"
+
 const ContactInfo = ({ firstName, lastName, birthday, url, onChangeMode }) => {
   
   const checkDataStatus = () => {
@@ -13,14 +15,18 @@ const ContactInfo = ({ firstName, lastName, birthday, url, onChangeMode }) => {
     <>
       <div className="container mt-5">
         <div className="card mb-3">
-          <div className="card-header bg-transparent fs-4">User card</div>
+          <div className="card-header bg-transparent fs-2">{isUserData ? lastName + " " + firstName : "User card"}</div>
           {isUserData ? (
             <>
               <div className="card-body">
-                <h5 className="card-title">{firstName}</h5>
-                <h5 className="card-title">{lastName}</h5>
-                <h5 className="card-title">{birthday}</h5>
-                <h5 className="card-title">{url}</h5>
+                <div className="mb-1 row">
+                  <label htmlFor="birthday" className="col-sm-2 col-form-label">Birthday:</label>
+                  <h5 className="card-title" id="birthday">{birthday}</h5>
+                </div>
+                <div className="mb-2 row">
+                  <label htmlFor="url" className="col-sm-2 col-form-label">Url:</label>
+                  <h5 className="card-title" id="url"><a href={url} target="_blank">{url}</a></h5>
+                </div>
               </div>
               <div className="card-footer bg-transparent">
                 <button className="btn btn-primary w-20" onClick={onChangeMode}>Edit</button>
