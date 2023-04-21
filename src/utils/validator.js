@@ -28,22 +28,19 @@ export function validator(data, config) {
 				const birthdayRexExp =
 					/^(([123]{1}[0-9]){1}|[0]{1}[1-9]{1})\.([0]{1}[1-9]{1}|[1]{1}[012])\.[0-9]{4}$/g
 				statusValidate = !birthdayRexExp.test(neededDate.trim())
-				console.log(neededDate)
 				break
 			}
 			case 'isLessCurrentDate': {
-				userDateArray = data.split('.')
+				const dateText = data.split('-')
 				const currentDate = new Date()
-				inputDate = new Date(
-					`${
-						userDateArray[1] + '/' + userDateArray[0] + '/' + userDateArray[2]
-					}`
+				const neededDate = new Date(
+					`${dateText[0] + '/' + dateText[1] + '/' + dateText[2]}`
 				)
 				if (
-					currentDate.getTime() < inputDate.getTime() ||
-					(inputDate.getFullYear === currentDate.getFullYear &&
-						inputDate.getMonth() === currentDate.getMonth() &&
-						inputDate.getDay() === currentDate.getDay())
+					currentDate.getTime() < neededDate.getTime() ||
+					(neededDate.getFullYear() === currentDate.getFullYear() &&
+						neededDate.getMonth() === currentDate.getMonth() &&
+						neededDate.getDay() === currentDate.getDay())
 				) {
 					statusValidate = true
 				} else {
@@ -52,12 +49,13 @@ export function validator(data, config) {
 				break
 			}
 			case 'isMoreTargetDate': {
-				userDateArray = data.split('.')
+				userDateArray = data.split('-')
 				inputDate = new Date(
 					`${
-						userDateArray[1] + '/' + userDateArray[0] + '/' + userDateArray[2]
+						userDateArray[0] + '/' + userDateArray[1] + '/' + userDateArray[2]
 					}`
 				)
+				console.log(inputDate)
 				if (inputDate.getFullYear() < 1900) {
 					statusValidate = true
 				} else {
