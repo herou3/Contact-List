@@ -3,27 +3,42 @@ import TextField from '../common/textField'
 import { validator } from '../../utils/validator'
 import InfoModel from '../common/infoModal'
 import CustomLink from '../common/customLink'
-import { useLocation } from 'react-router-dom'
+import { validatorConfig } from '../../models/validatorConfig'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { saveObjectInLocalStorage, getLocalStorageObject } from '../../utils/interactionLocalStorage'
 
-const EditForm = ({
-	validatorConfig,
-	onChange,
-	isHaveDate,
-	onCompleteChange,
-	onChangeMode,
-  ...props
-}) => {
+const EditForm = () => {
 	const location = useLocation()
 	const data = location.state?.data
-  console.log(location)
-	console.log(data)
-  console.log(props)
+  const navigate = useNavigate()
+	const [changingData, setChangingData] = data ? useState(data?.dataForForm) : useState(getLocalStorageObject('currentUser'))
+	
+  const [validateConfig, setValidateConfig] = useState(data?.validatorConfig)
+  const [savedData, setSavedData] = useState(changingData)
+	const [isHaveData, setIsHaveData] = data?.isHaveData ? useState(data?.isHaveData) : (changingData ? useState(true) : useState(false))
 	const [errors, setErrors] = useState({})
 	const [isTryUpdate, setIsTryUpdate] = useState(false)
-	const [fullName] = useState(data.lastName + ' ' + data.firstName)
-	const [isCreated] = useState(isHaveDate)
+	const [fullName] = useState(
+		changingData?.lastName + ' ' + changingData?.firstName
+	)
+	const [isCreated] = useState(isHaveData)
 	const [isOpenPopup, setIsOpenPopup] = useState(false)
+	const [isSuccessChange, setIsSuccessChange] = useState(false)
 	const isValid = Object.keys(errors).length === 0
+
+	const handleChange = ({ target }) => {
+		setChangingData((prevState) => ({
+			...prevState,
+			[target.name]: target.value
+		}))
+	}
+
+	const handleCompleteEdit = () => {
+		saveObjectInLocalStorage('currentUser', changingData)
+		setSavedData(changingData)
+		setIsHaveData(true)
+	}
+
 	const handleSubmit = (event) => {
 		event.preventDefault()
 		const isValid = validate()
@@ -31,81 +46,117 @@ const EditForm = ({
 		if (!isValid) {
 			return
 		}
-		onCompleteChange()
+		handleCompleteEdit()
 		setIsOpenPopup(true)
 	}
+
+  useEffect(() => {
+    if(!changingData) {
+      navigate('/create')
+    }
+    if (changingData && location.pathname.includes("create")) {
+      navigate('/edit')
+    }
+  }, [])
 
 	useEffect(() => {
 		if (isTryUpdate) {
 			validate()
 		}
-	}, [data])
+	}, [changingData])
+
+  useEffect(() => {
+    if (!changingData) {
+      setChangingData({
+				firstName: '',
+				lastName: '',
+				birthday: '',
+				url: ''
+		  })
+    }
+    if (!validateConfig) {
+      setValidateConfig(validatorConfig)
+    }
+  }, [])
+
+	useEffect(() => {
+		if (isSuccessChange) {
+			navigate('/', { state: savedData })
+		}
+	}, [isSuccessChange])
 
 	const validate = () => {
-		const errors = validator(data, validatorConfig)
+		const errors = validator(changingData, validateConfig)
 		setErrors(errors)
 		return Object.keys(errors).length === 0
 	}
 
 	const handleClose = (prevState) => {
 		setIsOpenPopup(!prevState)
-		onChangeMode()
+		if (isValid) {
+			setIsSuccessChange(true)
+		}
 	}
 
 	return (
 		<div className='container mt-5'>
 			<div className='row'>
 				<div className='row justify-content-md-center'>
-					<h2>{isHaveDate ? 'Edit ' + fullName : 'Create New User'}</h2>
+					<h2>{isHaveData ? 'Edit ' + fullName : 'Create New User'}</h2>
 					<form onSubmit={handleSubmit}>
 						<TextField
 							labelText='First Name'
 							id='firstName'
 							name='firstName'
-							value={data.firstName}
-							onChange={onChange}
-							error={errors.firstName}
+							value={changingData?.firstName}
+							onChange={handleChange}
+							error={errors?.firstName}
 						></TextField>
 						<TextField
 							labelText='Last Name'
 							id='lastName'
 							name='lastName'
-							value={data.lastName}
-							onChange={onChange}
-							error={errors.lastName}
+							value={changingData?.lastName}
+							onChange={handleChange}
+							error={errors?.lastName}
 						></TextField>
 						<TextField
 							labelText='Birthday'
 							type='date'
 							id='birthday'
 							name='birthday'
-							value={data.birthday}
-							onChange={onChange}
-							error={errors.birthday}
+							value={changingData?.birthday}
+							onChange={handleChange}
+							error={errors?.birthday}
 						></TextField>
 						<TextField
 							labelText='Url'
 							id='url'
 							name='url'
-							value={data.url}
-							onChange={onChange}
-							error={errors.url}
+							value={changingData?.url}
+							onChange={handleChange}
+							error={errors?.url}
 						></TextField>
 						<div className='d-grid gap-2 col-6 mx-auto'>
-							<CustomLink></CustomLink>
-							<button disabled={!isValid} className='btn btn-primary'>
-								{isHaveDate ? 'Update' : 'Create'}
-							</button>
-							{isHaveDate && (
-								<button className='btn btn-secondary' onClick={onChangeMode}>
-									Back
+							<CustomLink to={'/'} isdisabled={String(!isValid)}>
+								<button
+									disabled={!isValid}
+									className='btn btn-primary'
+									onClick={handleSubmit}
+								>
+									{isHaveData ? 'Update' : 'Create'}
 								</button>
+							</CustomLink>
+							{isHaveData && (
+								<CustomLink to={'/'}>
+									<button className='btn btn-secondary'>Back</button>
+								</CustomLink>
 							)}
 						</div>
 					</form>
 				</div>
 			</div>
-			{isHaveDate && (
+			{isHaveData && (
 				<InfoModel
 					title='Success'
 					text={
@@ -118,5 +169,5 @@ const EditForm = ({
 		</div>
 	)
 }
-///const InfoModel = ({ title, text, onClick }) => {
+
 export default EditForm

@@ -77,6 +77,8 @@ export function validator(data, config) {
 		}
 	}
 	for (const fieldName in data) {
+    console.log(data);
+    console.log(config);
 		for (const validateMethod in config[fieldName]) {
 			const error = validate(
 				validateMethod,

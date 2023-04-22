@@ -9,7 +9,7 @@ function App() {
       <Route path=''>
         <Route path='' element={<ContactCard />} />
         <Route path='edit' element={<EditForm />} />
-			  <Route path='create' element={<ContactCard />} />
+			  <Route path='create' element={<EditForm />} />
       </Route>
 		</Routes>
 	)

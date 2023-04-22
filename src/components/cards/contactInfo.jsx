@@ -1,37 +1,19 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import CustomLink from '../common/customLink'
 
-/*
-				onChangeMode={toggleChangeEditMode}
-				onChange={handleChange}
-				onCompleteChange={handleCompleteEdit}
-				validatorConfig={validatorConfig}
-				isHaveDate={isHaveData}
-*/
-
-const ContactInfo = ({
-	data,
-	onChangeMode,
-	onChange,
-	omCompleteChange,
-	validatorConfig,
-	isHaveDate
-}) => {
+const ContactInfo = ({ data, validatorConfig }) => {
 	const checkDataStatus = () => {
 		if (data.firstName || data.lastName || data.birthday || data.url) {
 			return true
 		}
 		return false
 	}
-
-	const dataForEditForm = {
-		data: data,
-    validatorConfig: validatorConfig,
-    isHaveDate: isHaveDate
-	}
-  console.log(dataForEditForm);
 	const isUserData = checkDataStatus()
+	const dataForEditForm = {
+		dataForForm: data,
+		validatorConfig: validatorConfig,
+		isHaveData: isUserData
+	}
 
 	return (
 		<>
@@ -64,12 +46,7 @@ const ContactInfo = ({
 							</div>
 							<div className='card-footer bg-transparent'>
 								<CustomLink to={`/edit`} state={{ data: dataForEditForm }}>
-									<button
-										className='btn btn-primary w-20'
-										onClick={onChangeMode}
-									>
-										Edit
-									</button>
+									<button className='btn btn-primary w-20'>Edit</button>
 								</CustomLink>
 							</div>
 						</>
@@ -79,23 +56,9 @@ const ContactInfo = ({
 								<h5 className='card-title'>No data...</h5>
 							</div>
 							<div className='card-footer bg-transparent'>
-								<Link
-									to={`/`}
-									state={{
-										data: data,
-										onChange: onChange,
-										omCompleteChange: omCompleteChange,
-										validatorConfig: validatorConfig,
-										isHaveDate: isHaveDate
-									}}
-								>
-									<button
-										className='btn btn-primary w-20'
-										onClick={onChangeMode}
-									>
-										Create
-									</button>
-								</Link>
+								<CustomLink to={`/edit`} state={{ data: dataForEditForm }}>
+									<button className='btn btn-primary w-20'>Create</button>
+								</CustomLink>
 							</div>
 						</div>
 					)}
