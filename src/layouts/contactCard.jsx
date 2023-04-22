@@ -1,18 +1,24 @@
 import React, { useState } from 'react'
 import { validatorConfig } from '../models/validatorConfig'
+import {
+	saveObjectInLocalStorage,
+	getLocalStorageObject
+} from '../utils/interactionLocalStorage'
 import ContactInfo from '../components/cards/contactInfo'
-import EditForm from '../components/forms/editForm'
 
 const ContactCard = () => {
-	const [data, setData] = useState({
-		firstName: '',
-		lastName: '',
-		birthday: '',
-		url: ''
-	})
+	const dataFromLocalStorage = getLocalStorageObject('currentUser')
+	const [data, setData] = dataFromLocalStorage
+		? useState(dataFromLocalStorage)
+		: useState({
+				firstName: '',
+				lastName: '',
+				birthday: '',
+				url: ''
+		  })
 	const [currentData, setCurrentData] = useState(data)
-	const [isEditMode, setIsEditMode] = useState(false)
-	const [isHaveData, setIsHaveData] = useState(false)
+	const [, setIsEditMode] = useState(false)
+	const [isHaveData, setIsHaveData] = useState(data ? true : false)
 
 	const handleChange = ({ target }) => {
 		setCurrentData((prevState) => ({
@@ -22,6 +28,7 @@ const ContactCard = () => {
 	}
 
 	const handleCompleteEdit = () => {
+		saveObjectInLocalStorage('currentUser', currentData)
 		setData(currentData)
 		setIsHaveData(true)
 	}
@@ -32,24 +39,18 @@ const ContactCard = () => {
 
 	return (
 		<>
-			{!isEditMode ? (
-				<ContactInfo
-					firstName={data.firstName}
-					lastName={data.lastName}
-					birthday={data.birthday}
-					url={data.url}
-					onChangeMode={toggleChangeEditMode}
-				/>
-			) : (
-				<EditForm
-					data={currentData}
-					validatorConfig={validatorConfig}
-					isHaveDate={isHaveData}
-					onChange={handleChange}
-					onCompleteChange={handleCompleteEdit}
-					onChangeMode={toggleChangeEditMode}
-				/>
-			)}
+			<ContactInfo
+				data={data}
+				// firstName={data.firstName}
+				// lastName={data.lastName}
+				// birthday={data.birthday}
+				// url={data.url}
+				onChangeMode={toggleChangeEditMode}
+				onChange={handleChange}
+				onCompleteChange={handleCompleteEdit}
+				validatorConfig={validatorConfig}
+				isHaveDate={isHaveData}
+			/>
 		</>
 	)
 }

@@ -19,7 +19,6 @@
 	// Здесь мы подключаем используемые плагины.
 	"plugins": ["react", "prettier"],
 	"rules": {
-		"prettier/prettier": "error",
 		"react/prop-types": 0 // Отключаем правило проверки передаваемых типов.
 	}
 }

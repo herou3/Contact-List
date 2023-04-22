@@ -2,15 +2,22 @@ import React, { useState, useEffect } from 'react'
 import TextField from '../common/textField'
 import { validator } from '../../utils/validator'
 import InfoModel from '../common/infoModal'
+import CustomLink from '../common/customLink'
+import { useLocation } from 'react-router-dom'
 
 const EditForm = ({
-	data,
 	validatorConfig,
 	onChange,
 	isHaveDate,
 	onCompleteChange,
-	onChangeMode
+	onChangeMode,
+  ...props
 }) => {
+	const location = useLocation()
+	const data = location.state?.data
+  console.log(location)
+	console.log(data)
+  console.log(props)
 	const [errors, setErrors] = useState({})
 	const [isTryUpdate, setIsTryUpdate] = useState(false)
 	const [fullName] = useState(data.lastName + ' ' + data.firstName)
@@ -85,6 +92,7 @@ const EditForm = ({
 							error={errors.url}
 						></TextField>
 						<div className='d-grid gap-2 col-6 mx-auto'>
+							<CustomLink></CustomLink>
 							<button disabled={!isValid} className='btn btn-primary'>
 								{isHaveDate ? 'Update' : 'Create'}
 							</button>

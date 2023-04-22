@@ -1,8 +1,18 @@
 import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import EditForm from './components/forms/editForm'
 import ContactCard from './layouts/contactCard'
 
 function App() {
-	return <ContactCard />
+	return (
+		<Routes>
+      <Route path=''>
+        <Route path='' element={<ContactCard />} />
+        <Route path='edit' element={<EditForm />} />
+			  <Route path='create' element={<ContactCard />} />
+      </Route>
+		</Routes>
+	)
 }
 
 export default App
