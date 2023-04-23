@@ -3,7 +3,7 @@ import CustomLink from '../common/customLink'
 
 const ContactInfo = ({ data, validatorConfig }) => {
 	const checkDataStatus = () => {
-		if (data.firstName || data.lastName || data.birthday || data.url) {
+		if (data?.firstName || data?.lastName || data?.birthday || data?.url) {
 			return true
 		}
 		return false
@@ -20,7 +20,7 @@ const ContactInfo = ({ data, validatorConfig }) => {
 			<div className='container mt-5'>
 				<div className='card mb-3'>
 					<div className='card-header bg-transparent fs-2'>
-						{isUserData ? data.lastName + ' ' + data.firstName : 'User card'}
+						{isUserData ? data?.lastName + ' ' + data?.firstName : 'User card'}
 					</div>
 					{isUserData ? (
 						<>
@@ -30,7 +30,7 @@ const ContactInfo = ({ data, validatorConfig }) => {
 										Birthday:
 									</label>
 									<h5 className='card-title' id='birthday'>
-										{data.birthday}
+										{data?.birthday}
 									</h5>
 								</div>
 								<div className='mb-2 row'>
@@ -38,8 +38,8 @@ const ContactInfo = ({ data, validatorConfig }) => {
 										Url:
 									</label>
 									<h5 className='card-title' id='url'>
-										<a href={data.url} target='_blank' rel='noreferrer'>
-											{data.url}
+										<a href={data?.url} target='_blank' rel='noreferrer'>
+											{data?.url}
 										</a>
 									</h5>
 								</div>
